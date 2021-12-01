@@ -2,7 +2,7 @@
 cmake_minimum_required (VERSION 3.1)
 
 #define variables and project name
-set (YEAR_PREFIX 20xx)
+set (YEAR_PREFIX 2021)
 set (NAMESPACE "Aoc${YEAR_PREFIX}")
 set (PROJECT_NAME "${YEAR_PREFIX}_AoC_VM")
 set (CMAKE_CXX_STANDARD 11)
