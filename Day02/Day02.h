@@ -12,6 +12,5 @@
 
 namespace AocDay02 {
 //Function Definitions
-    std::pair<int32_t,int32_t> followPath(const std::vector<std::string>&);
-    std::pair<int32_t,int32_t> followPath2(const std::vector<std::string>&);
+    std::pair<int32_t,int32_t> followPath(const std::vector<std::string>&, bool useAim = false);
 }

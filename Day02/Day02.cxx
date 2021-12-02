@@ -28,14 +28,14 @@ namespace AocDay02 {
 
     std::string solveb() {
         auto input = parseFileForLines(InputFileName);
-        auto output = followPath2(input);
+        auto output = followPath(input,true);
         return to_string(output.first*output.second);
     }
 
-    std::pair<int32_t,int32_t> followPath(const std::vector<std::string>& ins) {
-        int32_t x{0},y{0};
+    std::pair<int32_t,int32_t> followPath(const std::vector<std::string>& ins, bool useAim) {
+        int32_t x{0},y{0},y2{0};
         unordered_map<string, std::function<void(int32_t)>> ops = {
-            {"forward",[&](int32_t val){x+=val;}},
+            {"forward",[&](int32_t val){x+=val;y2+=y*val;}},
             {"down",[&](int32_t val){y+=val;}},
             {"up",[&](int32_t val){y-=val;}}
         };
@@ -45,22 +45,6 @@ namespace AocDay02 {
             ops[op[0]](stoi(op[1]));
         }
         
-        return make_pair(x, y);
-    }
-    
-    std::pair<int32_t,int32_t> followPath2(const std::vector<std::string>& ins) {
-        int32_t x{0},y{0},aim{0};
-        unordered_map<string, std::function<void(int32_t)>> ops = {
-            {"forward",[&](int32_t val){x+=val;y+=aim*val;}},
-            {"down",[&](int32_t val){aim+=val;}},
-            {"up",[&](int32_t val){aim-=val;}}
-        };
-        
-        for(const auto& s: ins) {
-            auto op = parseLineForWords(s);
-            ops[op[0]](stoi(op[1]));
-        }
-        
-        return make_pair(x, y);
+        return make_pair(x, useAim ? y2: y);
     }
 }

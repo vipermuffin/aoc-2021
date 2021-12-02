@@ -51,7 +51,7 @@ TEST(Y2021_Day2Example,Test2) {
         "down 8",
         "forward 2"
     };
-    auto result = followPath2(x);
+    auto result = followPath(x,true);
     EXPECT_EQ(15,result.first);
     EXPECT_EQ(60, result.second);
 }
