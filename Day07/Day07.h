@@ -13,6 +13,7 @@
 namespace AocDay07 {
 //Function Definitions
     int32_t findMinFuel(std::vector<int32_t>&);
+    int32_t findMinFuel(std::vector<int32_t>&,bool);
     int32_t findMinFuel2(std::vector<int32_t>&);
     int32_t calcFuel(int32_t diff);
 }

@@ -30,12 +30,12 @@ TEST(Y2021_SolveDay7, FinalSolutionPartB) {
 
 TEST(Y2021_Day7Example,Test1) {
     vector<int32_t>x {16,1,2,0,4,2,7,1,2,14};
-    EXPECT_EQ(37,findMinFuel(x));
+    EXPECT_EQ(37,findMinFuel(x,false));
 }
 
 TEST(Y2021_Day7Example,Test2) {
     vector<int32_t>x {16,1,2,0,4,2,7,1,2,14};
-    EXPECT_EQ(168,findMinFuel2(x));
+    EXPECT_EQ(168,findMinFuel(x,true));
 }
 
 TEST(Y2021_Day7Example,Test3) {

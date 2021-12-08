@@ -11,52 +11,41 @@
 #include "AoCUtils.h"
 //Common Libraries
 #include <algorithm> //std::sort, find, for_each, max_element, etc
-//#include <array>
 #include <climits>   //INT_MIN, INT_MAX, etc.
-//#include <chrono>
-//#include <iostream>
-//#include <fstream> //ifstream
-//#include <functional> //std::function
-//#include <iomanip> //setfill setw hex
-//#include <map>
-//#include <math.h> //sqrt
-//#include <numeric> //std::accumulate
-//#include <queue>
-//#include <regex>
-//#include <set>
-//#include <sstream>
-//#include <thread>
-//#include <tuple>
-//#include <unordered_map>
-//#include <unordered_set>
-
+#include <numeric> //std::accumulate
 
 using namespace std;
 namespace AocDay07 {
 
+    template <class T>
+    T average(const vector<T>& vals) {
+        if(vals.size() == 0)
+            return 0;
+        return std::accumulate(vals.begin(), vals.end(), static_cast<T>(0))/vals.size();
+    }
+    
     static const std::string InputFileName = "Day07.txt";
     std::string solvea() {
         auto input = parseFileForLines(InputFileName);
         auto positions = parseCsvLineForNum(input.front());
-		return to_string(findMinFuel(positions));
+		return to_string(findMinFuel(positions,false));
     }
 
     std::string solveb() {
         auto input = parseFileForLines(InputFileName);
         auto positions = parseCsvLineForNum(input.front());
-        return to_string(findMinFuel2(positions));
+        return to_string(findMinFuel(positions,true));
     }
     
-    int32_t findMinFuel(std::vector<int32_t>& positions) {
+    int32_t findMinFuel(std::vector<int32_t>& positions, bool useAdvFuel) {
         std::sort(positions.begin(),positions.end());
         int32_t minFuel = INT32_MAX;
-        auto median = positions.size()/2;
+        int32_t target = useAdvFuel ? average(positions) : positions[positions.size()/2];
         
-        for(int i = median - 1 ; i <= median + 1;i++) {
-            int x = positions[i];
+        for(int i = target - 1 ; i <= target + 1;i++) {
             int sum{0};
             for(const auto& val : positions) {
-                sum += abs(val - x);
+                sum += useAdvFuel ? calcFuel(abs(val - i)) : abs(val - i);
             }
             if(sum < minFuel) {
                 minFuel = sum;
@@ -64,6 +53,7 @@ namespace AocDay07 {
         }
         return minFuel;
     }
+    
     int32_t calcFuel(int32_t diff) {
         int32_t sum{0};
         for(int i = 1; i<=diff;i++) {
@@ -71,21 +61,4 @@ namespace AocDay07 {
         }
         return sum;
     }
-    int32_t findMinFuel2(std::vector<int32_t>& positions) {
-        std::sort(positions.begin(),positions.end());
-        int32_t minFuel = INT32_MAX;
-        
-        for(int i = 0 ; i <= positions.back();i++) {
-            int x = i;
-            int sum{0};
-            for(const auto& val : positions) {
-                sum += calcFuel(abs(val - x));
-            }
-            if(sum < minFuel) {
-                minFuel = sum;
-            }
-        }
-        return minFuel;
-    }
-
 }
