@@ -11,32 +11,16 @@
 #include "AoCUtils.h"
 //Common Libraries
 #include <algorithm> //std::sort, find, for_each, max_element, etc
-//#include <array>
 #include <climits>   //INT_MIN, INT_MAX, etc.
-//#include <chrono>
-//#include <iostream>
-//#include <fstream> //ifstream
-//#include <functional> //std::function
-//#include <iomanip> //setfill setw hex
-//#include <map>
-//#include <math.h> //sqrt
 #include <numeric> //std::accumulate
-//#include <queue>
-//#include <regex>
-//#include <set>
-//#include <sstream>
-//#include <thread>
-//#include <tuple>
-//#include <unordered_map>
-#include <unordered_set>
 
 
 using namespace std;
 namespace AocDay09 {
 
     static const std::string InputFileName = "Day09.txt";
-    constexpr size_t X = 0;
-    constexpr size_t Y = 1;
+    constexpr size_t COL = 0;
+    constexpr size_t ROW = 1;
     typedef union {
         uint64_t xy;
         int32_t val[2];
@@ -54,75 +38,9 @@ namespace AocDay09 {
 
 		return to_string(calcBasinVal(input));
     }
-#if 0
-    int32_t calcLowPointRisk(const std::vector<std::string>& lines) {
+
+    int32_t calcLowPointRisk(const std::vector<std::string>& lines, std::vector<uint64_t>* lowPointCoords) {
         vector<int32_t> lowPoints{};
-        
-        //Find all low points
-        for(int row=0;row < lines.size();row++) {
-            for(int col=0; col < lines[row].size(); col++) {
-                int count{0};
-                for(int dx = -1; dx <= 1; dx++) {
-                    int x = col + dx;
-                    for(int dy= -1; dy<= 1; dy++) {
-                        int y = row + dy;
-                        if((x < 0 || y < 0) || (y >= lines.size()) || (x >= lines[row].size())) {
-                            count++;
-                        }else {
-                            if(lines[row][col] < lines[y][x]) {
-                                count++;
-                            }
-                        }
-                    }
-                }
-                if(count == 8) {
-                    auto val = lines[row][col];
-                    lowPoints.push_back(static_cast<int32_t>(val-'0')+1);
-                }
-            }
-        }
-        printVector(lowPoints);
-        return std::accumulate(lowPoints.begin(), lowPoints.end(), static_cast<int32_t>(0));
-    }
-#endif
-    int32_t calcLowPointRisk(const std::vector<std::string>& lines) {
-        vector<int32_t> lowPoints{};
-        
-        //Find all low points
-        for(int row=0;row < lines.size();row++) {
-            for(int col=0; col < lines[row].size(); col++) {
-                int count{0};
-                for(int dx = -1; dx <= 1; dx++) {
-                    int x = col + dx;
-                    if((x < 0) || (x >= lines[row].size())) {
-                        count++;
-                    }else {
-                        if(lines[row][col] < lines[row][x]) {
-                            count++;
-                        }
-                    }
-                }
-                for(int dy= -1; dy<= 1; dy++) {
-                    int y = row + dy;
-                    if((y < 0) || (y >= lines.size())) {
-                        count++;
-                    }else {
-                        if(lines[row][col] < lines[y][col]) {
-                            count++;
-                        }
-                    }
-                }
-                if(count == 4) {
-                    auto val = lines[row][col];
-                    lowPoints.push_back(static_cast<int32_t>(val-'0')+1);
-                }
-            }
-        }
-        return std::accumulate(lowPoints.begin(), lowPoints.end(), static_cast<int32_t>(0));
-    }
-    
-    int32_t calcBasinVal(const std::vector<std::string>& lines) {
-        vector<uint64_t> lowPoints{};
         xyUnion_t tmp{0};
         
         //Find all low points
@@ -150,17 +68,29 @@ namespace AocDay09 {
                     }
                 }
                 if(count == 4) {
-                    tmp.val[X] = col;
-                    tmp.val[Y] = row;
-                    lowPoints.push_back(tmp.xy);
+                    auto val = lines[row][col];
+                    lowPoints.push_back(static_cast<int32_t>(val-'0')+1);
+                    if(lowPointCoords != nullptr) {
+                        tmp.val[COL] = col;
+                        tmp.val[ROW] = row;
+                        lowPointCoords->push_back(tmp.xy);
+                    }
                 }
             }
         }
+        return std::accumulate(lowPoints.begin(), lowPoints.end(), static_cast<int32_t>(0));
+    }
+    
+    int32_t calcBasinVal(const std::vector<std::string>& lines) {
+        vector<uint64_t> lowPoints{};
+        xyUnion_t tmp{0};
+        calcLowPointRisk(lines,&lowPoints);
+
         vector<int32_t> basinVals{};
         for(const auto p : lowPoints) {
             unordered_set<uint64_t> visited{};
             tmp.xy = p;
-            basinVals.push_back(countBasinSize(lines, visited, tmp.val[Y], tmp.val[X]));
+            basinVals.push_back(countBasinSize(lines, visited, tmp.val[ROW], tmp.val[COL]));
         }
         std::sort(basinVals.begin(),basinVals.end());
         auto rItr = basinVals.rbegin();
@@ -174,8 +104,8 @@ namespace AocDay09 {
     
     int32_t countBasinSize(const std::vector<std::string>& lines, std::unordered_set<uint64_t>& visited, int32_t row, int32_t col) {
         xyUnion_t tmp{0};
-        tmp.val[X] = col;
-        tmp.val[Y] = row;
+        tmp.val[COL] = col;
+        tmp.val[ROW] = row;
         visited.insert(tmp.xy);
         if(lines[row][col] == '9') {
             return 0;
@@ -184,8 +114,8 @@ namespace AocDay09 {
         int count{0};
         for(int dx = -1; dx <= 1; dx+=2) {
             int x = col + dx;
-            tmp.val[X] = x;
-            tmp.val[Y] = row;
+            tmp.val[COL] = x;
+            tmp.val[ROW] = row;
             if((x < 0) || (x >= lines[row].size()) || visited.count(tmp.xy) > 0) {
                 
             }else {
@@ -194,8 +124,8 @@ namespace AocDay09 {
         }
         for(int dy= -1; dy<= 1; dy+=2) {
             int y = row + dy;
-            tmp.val[X] = col;
-            tmp.val[Y] = y;
+            tmp.val[COL] = col;
+            tmp.val[ROW] = y;
             if((y < 0) || (y >= lines.size()) || visited.count(tmp.xy) > 0) {
                 
             }else {
