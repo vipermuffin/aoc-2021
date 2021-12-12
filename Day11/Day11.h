@@ -12,15 +12,6 @@
 
 namespace AocDay11 {
 //Function Definitions
-#if 0
-class Octopus {
-public:
-    Octopus() = default;
-    Octopus(uint8_t initEnergy);
-    ~Octopus() = default;
-    bool step();
-};
-#endif
 std::vector<std::vector<uint8_t>> parseTextEnergy(const std::vector<std::string>&);
 int32_t step(std::vector<std::vector<uint8_t>>&);
 int32_t step(std::vector<std::vector<uint8_t>>&, int32_t);
