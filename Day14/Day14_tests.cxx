@@ -51,7 +51,7 @@ TEST(Y2021_Day14Example,Test1) {
     
     EXPECT_EQ(16,db.size());
     ASSERT_FALSE(db.count("CH")==0);
-    EXPECT_EQ("CBH", db.at("CH"));
+    EXPECT_EQ("B", db.at("CH"));
 }
 
 TEST(Y2021_Day14Example,Test2) {
@@ -76,13 +76,13 @@ TEST(Y2021_Day14Example,Test2) {
     auto db = buildReplacementList(x);
     string start{"NNCB"};
     auto result = performSteps(db, start, 1);
-    EXPECT_EQ("NCNBCHB",result);
+    EXPECT_EQ(1,result);//"NCNBCHB"
     result = performSteps(db, start, 2);
-    EXPECT_EQ("NBCCNBBBCBHCB",result);
+    EXPECT_EQ(5,result);//"NBCCNBBBCBHCB"
     result = performSteps(db, start, 3);
-    EXPECT_EQ("NBBBCNCCNBBNBNBBCHBHHBCHB",result);
+    EXPECT_EQ(11-4,result);//"NBBBCNCCNBBNBNBBCHBHHBCHB"11-4
     result = performSteps(db, start, 4);
-    EXPECT_EQ("NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB",result);
+    EXPECT_EQ(23-5,result);//"NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB"
 }
 
 TEST(Y2021_Day14Example,Test3) {
@@ -107,7 +107,7 @@ TEST(Y2021_Day14Example,Test3) {
     auto db = buildReplacementList(x);
     string start{"NNCB"};
     auto result = performSteps(db, start, 10);
-    EXPECT_EQ(1588,countChars(result));
+    EXPECT_EQ(1588,result);
 }
 
 TEST(Y2021_Day14Example,Test4) {
@@ -129,8 +129,8 @@ TEST(Y2021_Day14Example,Test4) {
         "CC -> N",
         "CN -> C"
     };
-    auto db = buildReplacementList2(x);
+    auto db = buildReplacementList(x);
     string start{"NNCB"};
-    auto result = performSteps3(db, start, 40);
+    auto result = performSteps(db, start, 40);
     EXPECT_EQ(2188189693529,result);
 }
