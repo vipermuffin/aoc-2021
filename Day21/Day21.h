@@ -13,5 +13,5 @@
 namespace AocDay21 {
 //Function Definitions
 int64_t playGame(int,int);
-int64_t playGame2(int,int);
+uint64_t playGame2(int,int);
 }

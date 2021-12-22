@@ -25,7 +25,7 @@ TEST(Y2021_SolveDay21, FinalSolutionPartA) {
 }
 
 TEST(Y2021_SolveDay21, FinalSolutionPartB) {
-    EXPECT_EQ("---", solveb());
+    EXPECT_EQ("647920021341197", solveb());
 }
 
 TEST(Y2021_Day21Example,Test1) {
@@ -34,9 +34,4 @@ TEST(Y2021_Day21Example,Test1) {
 
 TEST(Y2021_Day21Example,Test2) {
     EXPECT_EQ(444356092776315LL,playGame2(4,8));
-}
-
-TEST(Y2021_Day21Example,Test3) {
-    int x = 0;
-    EXPECT_EQ(0,x);
 }
